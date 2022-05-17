@@ -5,14 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/41e6c63461.js" crossorigin="anonymous"></script>
     <title>&#x26C5;Meteo</title>
 </head>
 <body>
     <div class="weather-app">
         <div class="container">
             <h3 class ="brand">the weather</h3>
+            <div>
             <h1 class="temp">16&#176;</h1>
-            <div class ="city-time"></div>
+            <div class ="city-time">
             <h1 class="name">London</h1>
             <small>
             <span class="time">06:09</span>
@@ -25,13 +27,14 @@
     <div class="weather">
         <img src="img/sun.png" class="icon" alt="icon" width="50" height="50"/>
             <span class="condition">Cloudy</span>
+            </div>
+        </div>
     </div>
-
-    <div class="panel1">
+    <div class="panel">
         <form id="locationInput">
             <input type="text" class="search" placeholder="Search Location..."/>
             <button type="submit" class="submit">
-                <i class="fas fa-search"></i>
+                <i class="fa-solid fa-magnifying-glass"></i>
             </button>
         </form>
         <ul class="cities">
