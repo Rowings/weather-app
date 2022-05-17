@@ -1,90 +1,60 @@
-// récuperation des éléments nécessaires
+function GetInfo() {
 
-const app = document.querySelector('.weather-app');
-const temp = document.querySelector('.temp');
-const dateOutput = document.querySelector('.date');
-const timeOutput = document.querySelector('.time');
-const conditionOuput = document.querySelector('.condition');
-const nameOutput = document.querySelector('.name');
-const icon = document.querySelector('.icon');
-const cloudOutput = document.queryselector('.cloud');
-const humidityOuput = document.querySelector('.humidity');
-const windOutput = document.querySelector('.wind');
-const form = document.getElementById('locationInput');
-const search = document.querySelector('.search');
-const btn = document.querySelector('.submit');
-const cities = document.querySelectorAll('.city');
+    var newName = document.getElementById("cityInput");
+    var cityName = document.getElementById("cityName");
+    cityName.innerHTML = "--"+newName.value+"--";
+
+fetch('https://api.openweathermap.org/data/2.5/forecast?q='+newName.value+'&appid=32ba0bfed592484379e51106cef3f204')
+.then(response => response.json())
+.then(data => {
+    //Getting the min and max values for each day
+    for(i = 0; i<5; i++){
+        document.getElementById("day" + (i+1) + "Min").innerHTML = "Min: " + Number(data.list[i].main.temp_min - 273.15).toFixed(1)+ "°";
+        //Number(1.3450001).toFixed(2); // 1.35
+    }
+
+    for(i = 0; i<5; i++){
+        document.getElementById("day" + (i+1) + "Max").innerHTML = "Max: " + Number(data.list[i].main.temp_max - 273.15).toFixed(2) + "°";
+    }
+ 
+
+    //Getting Weather Icons
+     for(i = 0; i<5; i++){
+        document.getElementById("img" + (i+1)).src = "http://openweathermap.org/img/wn/"+
+        data.list[i].weather[0].icon
+        +".png";
+    }
+
+    
+  
+    console.log(data)
 
 
-// Ville par défaut
-
-let cityInput = "London";
-
-// ajout d'un click event pour les villes prédéfinis
-cities.forEach((cities) => {
-    city.addEventListener('click', (e) => {
-//changer la ville de base par celle cliqué
-        cityInput = e.target.innerHTML;
-//fonction pour l'api
-        fetchWeatherData();
-
-        app.style.opacity = "0";
-    });
 })
 
-form.addEventListener('submit', (e) => {
-   // si la barre de recherche est vide 
-   if(search.value.length == 0) {
-       alert('Please type in a city name');
-   } else {
+.catch(err => alert("Something Went Wrong: Try Checking Your Internet Coneciton"))
+}
 
-        cityInput = search.value;
-
-        fetchWeatherData();
-
-        search.value = "";
-
-        app.style.opacity = "0";
-   }
-
-   e.preventDefault();
-});
-
-// fonction qui retourne le nombre de jour
-
-function dayOfTheWeek(day, month, year) {
-    const weekDay = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-    ];
-
-    return weekDay[new Date('${day}/${month}/${year}').getDay()];
-};
+function DefaultScreen(){
+    document.getElementById("cityInput").defaultValue = "London";
+    GetInfo();
+}
 
 
-// fonction qui prend les info de l'api 
+//Getting and displaying the text for the upcoming five days of the week
+var d = new Date();
+var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
 
-function fetchWeatherData(){
+//Function to get the correct integer for the index of the days array
+function CheckDay(day){
+    if(day + d.getDay() > 6){
+        return day + d.getDay() - 7;
+    }
+    else{
+        return day + d.getDay();
+    }
+}
 
-    fetch('http://api.weatherapi.com/v1/current.json?key=25c8e29efc4742d899290139221705&q=${cityInput}')
-
-    .then(response => response.json())
-    .then(data => {
-
-        console.log(data);
-
-        temp.innerHtml = data.current.temp_c + "&#176";
-        conditionOuput.innerHTML = data.current.condition.text;
-        
-
-        // extraire la date de la ville selectionné 
-        const date = data.location.locatime;
-        const y = parseInt(date.substr(0, 4));
-        const m = parseInt(date.substr(5, 2));
-        const d = parseInt(date.substr(8, 2));
-        const ime = date.substr(11);
+    for(i = 0; i<5; i++){
+        document.getElementById("day" + (i+1)).innerHTML = weekday[CheckDay(i)];
+    }
